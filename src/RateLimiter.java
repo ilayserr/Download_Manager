@@ -8,12 +8,10 @@
 public class RateLimiter implements Runnable {
     private final TokenBucket tokenBucket;
     private final long maxBytesPerSecond;
-//    private long lastRefillTimestamp;    
 
     RateLimiter(TokenBucket tokenBucket, Long maxBytesPerSecond) {
         this.tokenBucket = tokenBucket;
         this.maxBytesPerSecond = maxBytesPerSecond;
-//        this.lastRefillTimestamp = System.currentTimeMillis();
     }
 
     /**
@@ -21,14 +19,7 @@ public class RateLimiter implements Runnable {
      * @throws InterruptedException
      */
     private void refill() throws InterruptedException {
-    	while (!tokenBucket.terminated()){
-//	        long currentTimeMillis = System.currentTimeMillis();
-//	        long millisecondsPassed = currentTimeMillis - this.lastRefillTimestamp;
-//	        if (currentTimeMillis - this.lastRefillTimestamp > 1000) {
-//	            //long millisSinceLastRefill = currentTimeMillis - this.lastRefillTimestamp;
-//	            tokenBucket.add(maxBytesPerSecond * millisecondsPassed/1000);
-//	            this.lastRefillTimestamp = currentTimeMillis;
-//	        }
+    	while (!tokenBucket.terminated()){  		
     		tokenBucket.add(maxBytesPerSecond);
     		Thread.sleep(1000);
     	}
@@ -39,51 +30,8 @@ public class RateLimiter implements Runnable {
     	try {
 			refill();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage() + "\nDownload failed");
+        	System.exit(-1);
 		}
     }
 }
-
-
-/****************************/
-
-//
-//
-//public class RateLimiter implements Runnable {
-//    private final TokenBucket tokenBucket;
-//    private final long maxBytesPerSecond;
-////    private long lastRefillTimestamp;    
-//
-//    RateLimiter(TokenBucket tokenBucket, Long maxBytesPerSecond) {
-//        this.tokenBucket = tokenBucket;
-//        this.maxBytesPerSecond = maxBytesPerSecond;
-////        this.lastRefillTimestamp = System.currentTimeMillis();
-//    }
-//
-//    /**
-//     * adding maxBytesPerSecond tokens each second.
-//     * @throws InterruptedException
-//     */
-//    private void refill() throws InterruptedException {
-//    	while (!tokenBucket.terminated()){
-////	        long currentTimeMillis = System.currentTimeMillis();
-////	        long millisecondsPassed = currentTimeMillis - this.lastRefillTimestamp;
-////	        if (currentTimeMillis - this.lastRefillTimestamp > 1000) {
-////	            //long millisSinceLastRefill = currentTimeMillis - this.lastRefillTimestamp;
-////	            tokenBucket.add(maxBytesPerSecond * millisecondsPassed/1000);
-////	            this.lastRefillTimestamp = currentTimeMillis;
-////	        }
-//    		tokenBucket.add(maxBytesPerSecond);
-//    		Thread.sleep(1000);
-//    	}
-//    }
-//    
-//    @Override
-//    public void run() {
-//    	try {
-//			refill();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//    }
-//}

@@ -9,7 +9,7 @@ class Range {
         this.start = start;
         this.end = end;
     }
-
+    
     Long getStart() {
         return start;
     }
